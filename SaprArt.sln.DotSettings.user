@@ -3,5 +3,7 @@
   &lt;TestAncestor&gt;
     &lt;TestId&gt;xUnit::F75B9358-56A3-457F-86F6-EA7C07314B85::net10.0::Core.Test.Models.PanelLayoutTests&lt;/TestId&gt;
     &lt;TestId&gt;xUnit::F75B9358-56A3-457F-86F6-EA7C07314B85::net10.0::Core.Test.ValidatorTests&lt;/TestId&gt;
+    &lt;TestId&gt;xUnit::F75B9358-56A3-457F-86F6-EA7C07314B85::net10.0::Core.Test.Models.ZonedPanelLayoutTests.Constructor_OpeningBelowCutoutsWithClearance_DoesNotThrow&lt;/TestId&gt;
+    &lt;TestId&gt;xUnit::F75B9358-56A3-457F-86F6-EA7C07314B85::net10.0::Core.Test.Models.ZonedPanelLayoutTests&lt;/TestId&gt;
   &lt;/TestAncestor&gt;
 &lt;/SessionState&gt;</s:String></wpf:ResourceDictionary>

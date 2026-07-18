@@ -1,6 +1,4 @@
-using Core.Validators;
-
-namespace Core.Abstractions;
+namespace Core.Validators;
 
 public interface IValidator<in TComparable> where TComparable : IComparable<TComparable>
 {

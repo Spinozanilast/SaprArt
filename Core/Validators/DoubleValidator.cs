@@ -1,5 +1,3 @@
-using Core.Abstractions;
-
 namespace Core.Validators;
 
 public class DoubleValidator : IValidator<double>
