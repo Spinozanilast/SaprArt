@@ -1,0 +1,9 @@
+﻿<wpf:ResourceDictionary xml:space="preserve" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:s="clr-namespace:System;assembly=mscorlib" xmlns:ss="urn:shemas-jetbrains-com:settings-storage-xaml" xmlns:wpf="http://schemas.microsoft.com/winfx/2006/xaml/presentation">
+	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=6932ab4e_002Dcd43_002D487a_002D9e6a_002D735313e891ea/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" IsActive="True" Name="ValidatorTests" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;
+  &lt;TestAncestor&gt;
+    &lt;TestId&gt;xUnit::F75B9358-56A3-457F-86F6-EA7C07314B85::net10.0::Core.Test.Models.PanelLayoutTests&lt;/TestId&gt;
+    &lt;TestId&gt;xUnit::F75B9358-56A3-457F-86F6-EA7C07314B85::net10.0::Core.Test.ValidatorTests&lt;/TestId&gt;
+    &lt;TestId&gt;xUnit::F75B9358-56A3-457F-86F6-EA7C07314B85::net10.0::Core.Test.Models.ZonedPanelLayoutTests.Constructor_OpeningBelowCutoutsWithClearance_DoesNotThrow&lt;/TestId&gt;
+    &lt;TestId&gt;xUnit::F75B9358-56A3-457F-86F6-EA7C07314B85::net10.0::Core.Test.Models.ZonedPanelLayoutTests&lt;/TestId&gt;
+  &lt;/TestAncestor&gt;
+&lt;/SessionState&gt;</s:String></wpf:ResourceDictionary>
