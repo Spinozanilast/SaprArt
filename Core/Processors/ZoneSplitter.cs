@@ -6,9 +6,16 @@ namespace Core.Processors;
 
 public class ZoneSplitter : IZoneSplitter
 {
+    private readonly IZonedPanelValidator _validator;
+
+    public ZoneSplitter(IZonedPanelValidator validator)
+    {
+        _validator = validator;
+    }
+
     public IReadOnlyList<VerticalZone> Split(IZonedPanel panel)
     {
-        new ZonnedPanelValidator().Validate(panel).ThrowIfInvalid();
+        _validator.Validate(panel).ThrowIfInvalid();
 
         var zones = new List<VerticalZone>();
         var W = panel.Width;

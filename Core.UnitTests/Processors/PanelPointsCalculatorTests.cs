@@ -4,7 +4,7 @@ using Core.Validators;
 
 namespace Core.Test.Processors;
 
-public class PanelPointCalculatorTests
+public class PanelPointsCalculatorTests
 {
     private const double DefaultLength = 12;
     private const double DefaultHeight = 5;
@@ -12,9 +12,15 @@ public class PanelPointCalculatorTests
     private const double DefaultSidePanelWidth = 1;
     private const double DefaultOffset = 0.3;
 
-    private readonly PanelPointCalculator _calculator = new();
+    private readonly PanelLayoutOptionsValidator _validator = new();
+    private readonly PanelPointsCalculator _calculator;
 
-    private PanelForLayout CreateOptions(double? length = null, double? height = null,
+    public PanelPointsCalculatorTests()
+    {
+        _calculator = new PanelPointsCalculator(_validator);
+    }
+
+    private PanelLayoutOptions CreateOptions(double? length = null, double? height = null,
         double? panelWidth = null, double? sidePanelWidth = null, double? targetOffset = null) =>
         new(length ?? DefaultLength, height ?? DefaultHeight, panelWidth ?? DefaultPanelWidth,
             sidePanelWidth ?? DefaultSidePanelWidth, targetOffset ?? DefaultOffset);
@@ -191,7 +197,7 @@ public class PanelPointCalculatorTests
     [Fact]
     public void Calculate_InvalidOptions_ThrowsValidationException()
     {
-        var options = new PanelForLayout(0, 5, 1, 1, 0.3);
+        var options = new PanelLayoutOptions(0, 5, 1, 1, 0.3);
 
         Assert.Throws<ValidationException>(() => _calculator.Calculate(options));
     }
@@ -199,7 +205,7 @@ public class PanelPointCalculatorTests
     [Fact]
     public void Calculate_NegativeLength_ThrowsValidationException()
     {
-        var options = new PanelForLayout(-1, 5, 1, 1, 0.3);
+        var options = new PanelLayoutOptions(-1, 5, 1, 1, 0.3);
 
         Assert.Throws<ValidationException>(() => _calculator.Calculate(options));
     }
@@ -207,7 +213,7 @@ public class PanelPointCalculatorTests
     [Fact]
     public void Calculate_NegativeOffset_ThrowsValidationException()
     {
-        var options = new PanelForLayout(12, 5, 1, 1, -0.1);
+        var options = new PanelLayoutOptions(12, 5, 1, 1, -0.1);
 
         Assert.Throws<ValidationException>(() => _calculator.Calculate(options));
     }
@@ -215,7 +221,7 @@ public class PanelPointCalculatorTests
     [Fact]
     public void Calculate_NonDivisibleWidth_ThrowsValidationException()
     {
-        var options = new PanelForLayout(10, 5, 3, 1, 0.3);
+        var options = new PanelLayoutOptions(10, 5, 3, 1, 0.3);
 
         Assert.Throws<ValidationException>(() => _calculator.Calculate(options));
     }

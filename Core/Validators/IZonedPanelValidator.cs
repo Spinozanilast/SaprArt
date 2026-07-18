@@ -2,7 +2,7 @@ using Core.Layouts;
 
 namespace Core.Validators;
 
-public interface IZonnedPanelValidator
+public interface IZonedPanelValidator
 {
     ValidationResult Validate(IZonedPanel panel);
 }

@@ -3,7 +3,7 @@ using Core.Validators;
 
 namespace Core.Test.Validators;
 
-public class ZonnedPanelValidatorTests
+public class ZonedPanelValidatorTests
 {
     private const double DefaultWidth = 1000;
     private const double DefaultLength = 2000;
@@ -14,7 +14,7 @@ public class ZonnedPanelValidatorTests
     private const double DefaultOpeningMinY = 500;
     private const double DefaultOpeningH = 300;
 
-    private readonly ZonnedPanelValidator _validator = new();
+    private readonly ZonedPanelValidator _validator = new();
 
     private IZonedPanel CreateValid() =>
         new ZonedPanel(DefaultWidth, DefaultLength, DefaultSocketH, DefaultSocketW,

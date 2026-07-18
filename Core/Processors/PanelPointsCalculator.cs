@@ -3,11 +3,18 @@ using Core.Validators;
 
 namespace Core.Processors;
 
-public class PanelPointCalculator : IPanelPointCalculator
+public class PanelPointsCalculator : IPanelPointsCalculator
 {
-    public PanelPointCalculationResult Calculate(PanelForLayout options)
+    private readonly IPanelLayoutOptionsValidator _validator;
+
+    public PanelPointsCalculator(IPanelLayoutOptionsValidator validator)
     {
-        new PanelLayoutOptionsValidator().Validate(options).ThrowIfInvalid();
+        _validator = validator;
+    }
+
+    public PanelPointCalculationResult Calculate(PanelLayoutOptions options)
+    {
+        _validator.Validate(options).ThrowIfInvalid();
 
         var internalWidth = options.Length - 2 * options.SidePanelWidth;
         var internalPanelCount = (int)(internalWidth / options.PanelWidth);

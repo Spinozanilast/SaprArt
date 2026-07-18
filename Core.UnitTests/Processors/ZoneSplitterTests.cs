@@ -13,7 +13,13 @@ public class ZoneSplitterTests
     private const double DefaultOpeningMinY = 500;
     private const double DefaultOpeningH = 300;
 
-    private readonly ZoneSplitter _splitter = new();
+    private readonly ZonedPanelValidator _validator = new();
+    private readonly ZoneSplitter _splitter;
+
+    public ZoneSplitterTests()
+    {
+        _splitter = new ZoneSplitter(_validator);
+    }
 
     private IZonedPanel CreatePanel(
         double leftSocketH = 200, double leftSocketW = 100,

@@ -16,7 +16,7 @@ public class PanelLayoutOptionsValidatorTests
     [Fact]
     public void Validate_ValidOptions_IsValid()
     {
-        var options = new PanelForLayout(DefaultLength, DefaultHeight, DefaultPanelWidth, DefaultSidePanelWidth, DefaultOffset);
+        var options = new PanelLayoutOptions(DefaultLength, DefaultHeight, DefaultPanelWidth, DefaultSidePanelWidth, DefaultOffset);
 
         Assert.True(_validator.Validate(options).IsValid);
     }
@@ -26,7 +26,7 @@ public class PanelLayoutOptionsValidatorTests
     [InlineData(-1)]
     public void Validate_InvalidLength_NotValid(double length)
     {
-        var options = new PanelForLayout(length, DefaultHeight, DefaultPanelWidth, DefaultSidePanelWidth, DefaultOffset);
+        var options = new PanelLayoutOptions(length, DefaultHeight, DefaultPanelWidth, DefaultSidePanelWidth, DefaultOffset);
 
         Assert.False(_validator.Validate(options).IsValid);
     }
@@ -36,7 +36,7 @@ public class PanelLayoutOptionsValidatorTests
     [InlineData(-5)]
     public void Validate_InvalidHeight_NotValid(double height)
     {
-        var options = new PanelForLayout(DefaultLength, height, DefaultPanelWidth, DefaultSidePanelWidth, DefaultOffset);
+        var options = new PanelLayoutOptions(DefaultLength, height, DefaultPanelWidth, DefaultSidePanelWidth, DefaultOffset);
 
         Assert.False(_validator.Validate(options).IsValid);
     }
@@ -46,7 +46,7 @@ public class PanelLayoutOptionsValidatorTests
     [InlineData(-1)]
     public void Validate_InvalidPanelWidth_NotValid(double panelWidth)
     {
-        var options = new PanelForLayout(DefaultLength, DefaultHeight, panelWidth, DefaultSidePanelWidth, DefaultOffset);
+        var options = new PanelLayoutOptions(DefaultLength, DefaultHeight, panelWidth, DefaultSidePanelWidth, DefaultOffset);
 
         Assert.False(_validator.Validate(options).IsValid);
     }
@@ -56,7 +56,7 @@ public class PanelLayoutOptionsValidatorTests
     [InlineData(-1)]
     public void Validate_InvalidSidePanelWidth_NotValid(double sidePanelWidth)
     {
-        var options = new PanelForLayout(DefaultLength, DefaultHeight, DefaultPanelWidth, sidePanelWidth, DefaultOffset);
+        var options = new PanelLayoutOptions(DefaultLength, DefaultHeight, DefaultPanelWidth, sidePanelWidth, DefaultOffset);
 
         Assert.False(_validator.Validate(options).IsValid);
     }
@@ -66,7 +66,7 @@ public class PanelLayoutOptionsValidatorTests
     [InlineData(1.5)]
     public void Validate_SidePanelWidthOutOfRange_NotValid(double sidePanelWidth)
     {
-        var options = new PanelForLayout(DefaultLength, DefaultHeight, DefaultPanelWidth, sidePanelWidth, DefaultOffset);
+        var options = new PanelLayoutOptions(DefaultLength, DefaultHeight, DefaultPanelWidth, sidePanelWidth, DefaultOffset);
 
         Assert.False(_validator.Validate(options).IsValid);
     }
@@ -76,7 +76,7 @@ public class PanelLayoutOptionsValidatorTests
     [InlineData(1.0)]
     public void Validate_SidePanelWidthAtBoundaries_IsValid(double sidePanelWidth)
     {
-        var options = new PanelForLayout(DefaultLength, DefaultHeight, DefaultPanelWidth, sidePanelWidth, DefaultOffset);
+        var options = new PanelLayoutOptions(DefaultLength, DefaultHeight, DefaultPanelWidth, sidePanelWidth, DefaultOffset);
 
         Assert.True(_validator.Validate(options).IsValid);
     }
@@ -84,7 +84,7 @@ public class PanelLayoutOptionsValidatorTests
     [Fact]
     public void Validate_NegativeOffset_NotValid()
     {
-        var options = new PanelForLayout(DefaultLength, DefaultHeight, DefaultPanelWidth, DefaultSidePanelWidth, -0.1);
+        var options = new PanelLayoutOptions(DefaultLength, DefaultHeight, DefaultPanelWidth, DefaultSidePanelWidth, -0.1);
 
         Assert.False(_validator.Validate(options).IsValid);
     }
@@ -94,7 +94,7 @@ public class PanelLayoutOptionsValidatorTests
     [InlineData(2)]
     public void Validate_OffsetAtOrAbovePanelWidth_NotValid(double targetOffset)
     {
-        var options = new PanelForLayout(DefaultLength, DefaultHeight, DefaultPanelWidth, DefaultSidePanelWidth, targetOffset);
+        var options = new PanelLayoutOptions(DefaultLength, DefaultHeight, DefaultPanelWidth, DefaultSidePanelWidth, targetOffset);
 
         Assert.False(_validator.Validate(options).IsValid);
     }
@@ -102,7 +102,7 @@ public class PanelLayoutOptionsValidatorTests
     [Fact]
     public void Validate_NonDivisibleInternalWidth_NotValid()
     {
-        var options = new PanelForLayout(length: 10, height: 5, panelWidth: 3, sidePanelWidth: 1, targetOffset: 0.3);
+        var options = new PanelLayoutOptions(length: 10, height: 5, panelWidth: 3, sidePanelWidth: 1, targetOffset: 0.3);
 
         Assert.False(_validator.Validate(options).IsValid);
     }
@@ -110,7 +110,7 @@ public class PanelLayoutOptionsValidatorTests
     [Fact]
     public void Validate_MultipleInvalidParams_AccumulatesErrors()
     {
-        var options = new PanelForLayout(length: 0, height: -5, panelWidth: 1, sidePanelWidth: 1, targetOffset: 0.3);
+        var options = new PanelLayoutOptions(length: 0, height: -5, panelWidth: 1, sidePanelWidth: 1, targetOffset: 0.3);
 
         var result = _validator.Validate(options);
 

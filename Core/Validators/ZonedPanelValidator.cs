@@ -2,7 +2,7 @@ using Core.Layouts;
 
 namespace Core.Validators;
 
-public class ZonnedPanelValidator : IZonnedPanelValidator
+public class ZonedPanelValidator : IZonedPanelValidator
 {
     public const int MinClearance = 100;
 

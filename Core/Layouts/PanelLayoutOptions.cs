@@ -1,6 +1,6 @@
 namespace Core.Layouts;
 
-public class PanelForLayout
+public class PanelLayoutOptions
 {
     public double Length { get; }
     public double Height { get; }
@@ -8,7 +8,7 @@ public class PanelForLayout
     public double SidePanelWidth { get; }
     public double TargetOffset { get; }
 
-    public PanelForLayout(double length, double height, double panelWidth, double sidePanelWidth, double targetOffset)
+    public PanelLayoutOptions(double length, double height, double panelWidth, double sidePanelWidth, double targetOffset)
     {
         Length = length;
         Height = height;

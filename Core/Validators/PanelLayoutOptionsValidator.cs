@@ -4,7 +4,7 @@ namespace Core.Validators;
 
 public class PanelLayoutOptionsValidator : IPanelLayoutOptionsValidator
 {
-    public ValidationResult Validate(PanelForLayout options)
+    public ValidationResult Validate(PanelLayoutOptions options)
     {
         var internalWidth = options.Length - 2 * options.SidePanelWidth;
         var internalPanelCount = (int)(internalWidth / options.PanelWidth);

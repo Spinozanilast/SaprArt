@@ -4,5 +4,5 @@ namespace Core.Validators;
 
 public interface IPanelLayoutOptionsValidator
 {
-    ValidationResult Validate(PanelForLayout options);
+    ValidationResult Validate(PanelLayoutOptions options);
 }
