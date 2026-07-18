@@ -10,4 +10,7 @@
   <ItemGroup>
     <PackageReference Include="WPF-UI" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Core\Core.csproj" />
+  </ItemGroup>
 </Project>

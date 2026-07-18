@@ -20,7 +20,7 @@ public class PanelPointsCalculatorTests
         _calculator = new PanelPointsCalculator(_validator);
     }
 
-    private PanelLayoutOptions CreateOptions(double? length = null, double? height = null,
+    private PanelLayout CreateOptions(double? length = null, double? height = null,
         double? panelWidth = null, double? sidePanelWidth = null, double? targetOffset = null) =>
         new(length ?? DefaultLength, height ?? DefaultHeight, panelWidth ?? DefaultPanelWidth,
             sidePanelWidth ?? DefaultSidePanelWidth, targetOffset ?? DefaultOffset);
@@ -94,27 +94,25 @@ public class PanelPointsCalculatorTests
     }
 
     [Fact]
-    public void Calculate_LocalPoints_OffsetsAlternate()
+    public void Calculate_LocalPoints_AllAtLeftOffset()
     {
         var result = _calculator.Calculate(CreateOptions());
 
         for (var i = 0; i < result.PanelCount - 2; i++)
         {
-            var expectedLocalX = i % 2 == 0 ? DefaultOffset : DefaultPanelWidth - DefaultOffset;
-            Assert.Equal(expectedLocalX, result.TargetPoints[i + 1].X, 10);
+            Assert.Equal(DefaultOffset, result.TargetPoints[i + 1].X, 10);
         }
     }
 
     [Fact]
-    public void Calculate_GlobalPoints_IncludePanelOffsets()
+    public void Calculate_GlobalPoints_AllAtLeftOffset()
     {
         var result = _calculator.Calculate(CreateOptions());
 
         for (var i = 0; i < result.PanelCount - 2; i++)
         {
             var panelStartX = DefaultSidePanelWidth + i * DefaultPanelWidth;
-            var localX = i % 2 == 0 ? DefaultOffset : DefaultPanelWidth - DefaultOffset;
-            var expectedGlobalX = panelStartX + localX;
+            var expectedGlobalX = panelStartX + DefaultOffset;
 
             Assert.Equal(expectedGlobalX, result.GlobalTargetPoints[i + 1].X, 10);
         }
@@ -133,7 +131,7 @@ public class PanelPointsCalculatorTests
     {
         var result = _calculator.Calculate(CreateOptions());
 
-        Assert.Equal(2.7, result.GlobalTargetPoints[2].X, 10);
+        Assert.Equal(2.3, result.GlobalTargetPoints[2].X, 10);
     }
 
     [Fact]
@@ -149,18 +147,18 @@ public class PanelPointsCalculatorTests
     {
         var result = _calculator.Calculate(CreateOptions());
 
-        Assert.Equal(0.7, result.TargetPoints[2].X, 10);
+        Assert.Equal(0.3, result.TargetPoints[2].X, 10);
     }
 
     [Fact]
-    public void Calculate_ZeroOffset_OddPanelsUseFullPanelWidth()
+    public void Calculate_ZeroOffset_AllPointsAtOrigin()
     {
         var result = _calculator.Calculate(CreateOptions(targetOffset: 0));
 
         Assert.Equal(0.0, result.TargetPoints[1].X, 10);
-        Assert.Equal(1.0, result.TargetPoints[2].X, 10);
+        Assert.Equal(0.0, result.TargetPoints[2].X, 10);
         Assert.Equal(1.0, result.GlobalTargetPoints[1].X, 10);
-        Assert.Equal(3.0, result.GlobalTargetPoints[2].X, 10);
+        Assert.Equal(2.0, result.GlobalTargetPoints[2].X, 10);
     }
 
     [Fact]
@@ -185,8 +183,8 @@ public class PanelPointsCalculatorTests
         Assert.Equal(3, result.TargetPoints[1].X, 10);
         Assert.Equal(13.0, result.GlobalTargetPoints[1].X, 10);
 
-        Assert.Equal(7, result.TargetPoints[2].X, 10);
-        Assert.Equal(27.0, result.GlobalTargetPoints[2].X, 10);
+        Assert.Equal(3, result.TargetPoints[2].X, 10);
+        Assert.Equal(23.0, result.GlobalTargetPoints[2].X, 10);
 
         Assert.Equal(7, result.TargetPoints[^1].X, 10);
         Assert.Equal(497.0, result.TargetPoints[^1].Y, 10);
@@ -197,7 +195,7 @@ public class PanelPointsCalculatorTests
     [Fact]
     public void Calculate_InvalidOptions_ThrowsValidationException()
     {
-        var options = new PanelLayoutOptions(0, 5, 1, 1, 0.3);
+        var options = new PanelLayout(0, 5, 1, 1, 0.3);
 
         Assert.Throws<ValidationException>(() => _calculator.Calculate(options));
     }
@@ -205,7 +203,7 @@ public class PanelPointsCalculatorTests
     [Fact]
     public void Calculate_NegativeLength_ThrowsValidationException()
     {
-        var options = new PanelLayoutOptions(-1, 5, 1, 1, 0.3);
+        var options = new PanelLayout(-1, 5, 1, 1, 0.3);
 
         Assert.Throws<ValidationException>(() => _calculator.Calculate(options));
     }
@@ -213,7 +211,7 @@ public class PanelPointsCalculatorTests
     [Fact]
     public void Calculate_NegativeOffset_ThrowsValidationException()
     {
-        var options = new PanelLayoutOptions(12, 5, 1, 1, -0.1);
+        var options = new PanelLayout(12, 5, 1, 1, -0.1);
 
         Assert.Throws<ValidationException>(() => _calculator.Calculate(options));
     }
@@ -221,7 +219,7 @@ public class PanelPointsCalculatorTests
     [Fact]
     public void Calculate_NonDivisibleWidth_ThrowsValidationException()
     {
-        var options = new PanelLayoutOptions(10, 5, 3, 1, 0.3);
+        var options = new PanelLayout(10, 5, 3, 1, 0.3);
 
         Assert.Throws<ValidationException>(() => _calculator.Calculate(options));
     }

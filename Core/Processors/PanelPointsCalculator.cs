@@ -5,7 +5,7 @@ namespace Core.Processors;
 
 public class PanelPointsCalculator(IPanelLayoutOptionsValidator validator) : IPanelPointsCalculator
 {
-    public PanelPointCalculationResult Calculate(PanelLayoutOptions options)
+    public PanelPointCalculationResult Calculate(PanelLayout options)
     {
         validator.Validate(options).ThrowIfInvalid();
 
@@ -22,10 +22,9 @@ public class PanelPointsCalculator(IPanelLayoutOptionsValidator validator) : IPa
         for (var i = 0; i < internalPanelCount; i++)
         {
             var panelStartX = options.SidePanelWidth + i * options.PanelWidth;
-            var localX = i % 2 == 0 ? options.TargetOffset : options.PanelWidth - options.TargetOffset;
 
-            localPoints.Add(new Point2D(localX, options.TargetOffset));
-            globalPoints.Add(new Point2D(panelStartX + localX, options.TargetOffset));
+            localPoints.Add(new Point2D(options.TargetOffset, options.TargetOffset));
+            globalPoints.Add(new Point2D(panelStartX + options.TargetOffset, options.TargetOffset));
         }
 
         localPoints.Add(new Point2D(options.SidePanelWidth - options.TargetOffset, options.Height - options.TargetOffset));

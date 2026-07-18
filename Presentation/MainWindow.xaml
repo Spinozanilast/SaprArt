@@ -4,9 +4,368 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
-        xmlns:local="clr-namespace:Presentation"
+        xmlns:controls="clr-namespace:Presentation.Controls"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
-    <Grid>
+        Title="SaprArt - Panel Visualization" Height="750" Width="1200"
+        WindowStartupLocation="CenterScreen"
+        Background="{DynamicResource ApplicationBackgroundBrush}">
+
+    <Grid Margin="4">
+        <TabControl x:Name="MainTabs" Background="Transparent"
+                    SelectionChanged="OnTabSelectionChanged">
+
+            <!-- ═══════════════════ TAB 1: Panel Points ═══════════════════ -->
+            <TabItem>
+                <TabItem.Header>
+                    <TextBlock Text="  Panel Points  " FontWeight="SemiBold" />
+                </TabItem.Header>
+                <Grid DataContext="{Binding PanelPoints}">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" MinWidth="300" />
+                        <ColumnDefinition Width="4" />
+                        <ColumnDefinition Width="*" MinWidth="300" />
+                    </Grid.ColumnDefinitions>
+
+                    <!-- Left: Input + DataGrid -->
+                    <Grid Grid.Column="0">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto" MinHeight="100" />
+                            <RowDefinition Height="4" />
+                            <RowDefinition Height="*" MinHeight="120" />
+                        </Grid.RowDefinitions>
+
+                        <!-- Input Section -->
+                        <ui:Card Grid.Row="0" Margin="8,8,8,4" Padding="12">
+                            <StackPanel>
+                                <TextBlock Text="Panel Points Configuration" FontSize="13" FontWeight="SemiBold"
+                                           Foreground="{DynamicResource TextFillColorPrimaryBrush}" Margin="0,0,0,10" />
+                                <TextBlock Text="Distribute target points across internal panels with side panels at both ends"
+                                           Foreground="{DynamicResource TextFillColorTertiaryBrush}" FontSize="11"
+                                           TextWrapping="Wrap" Margin="0,0,0,16" />
+
+                                <WrapPanel Orientation="Horizontal">
+                                    <StackPanel Width="160" Margin="0,0,12,4">
+                                        <TextBlock Text="Total Length (mm)" Foreground="{DynamicResource TextFillColorSecondaryBrush}" FontSize="11" Margin="0,0,0,2" />
+                                        <ui:TextBox x:Name="PointsLength" Text="{Binding Length, UpdateSourceTrigger=PropertyChanged}" />
+                                    </StackPanel>
+                                    <StackPanel Width="160" Margin="0,0,12,4">
+                                        <TextBlock Text="Height (mm)" Foreground="{DynamicResource TextFillColorSecondaryBrush}" FontSize="11" Margin="0,0,0,2" />
+                                        <ui:TextBox x:Name="PointsHeight" Text="{Binding Height, UpdateSourceTrigger=PropertyChanged}" />
+                                    </StackPanel>
+                                    <StackPanel Width="160" Margin="0,0,12,4">
+                                        <TextBlock Text="Internal Panel Width" Foreground="{DynamicResource TextFillColorSecondaryBrush}" FontSize="11" Margin="0,0,0,2" />
+                                        <ui:TextBox x:Name="PointsPanelWidth" Text="{Binding PanelWidth, UpdateSourceTrigger=PropertyChanged}" />
+                                    </StackPanel>
+                                    <StackPanel Width="160" Margin="0,0,12,4">
+                                        <TextBlock Text="Side Panel Width" Foreground="{DynamicResource TextFillColorSecondaryBrush}" FontSize="11" Margin="0,0,0,2" />
+                                        <ui:TextBox x:Name="PointsSidePanelWidth" Text="{Binding SidePanelWidth, UpdateSourceTrigger=PropertyChanged}" />
+                                    </StackPanel>
+                                    <StackPanel Width="160" Margin="0,0,12,4">
+                                        <TextBlock Text="Target Offset" Foreground="{DynamicResource TextFillColorSecondaryBrush}" FontSize="11" Margin="0,0,0,2" />
+                                        <ui:TextBox x:Name="PointsTargetOffset" Text="{Binding TargetOffset, UpdateSourceTrigger=PropertyChanged}" />
+                                    </StackPanel>
+                                </WrapPanel>
+
+                                <StackPanel Orientation="Horizontal" Margin="0,8,0,0">
+                                    <ui:Button Content="Build Points" Appearance="Primary"
+                                               Command="{Binding BuildCommand}" Padding="16,4" />
+                                    <TextBlock Text="{Binding StatusMessage}" Margin="12,0,0,0"
+                                               VerticalAlignment="Center" TextWrapping="Wrap"
+                                               FontSize="12" FontFamily="Consolas">
+                                        <TextBlock.Style>
+                                            <Style TargetType="TextBlock">
+                                                <Setter Property="Foreground" Value="{DynamicResource TextFillColorSecondaryBrush}" />
+                                                <Style.Triggers>
+                                                    <DataTrigger Binding="{Binding HasError}" Value="True">
+                                                        <Setter Property="Foreground" Value="#ef4444" />
+                                                    </DataTrigger>
+                                                </Style.Triggers>
+                                            </Style>
+                                        </TextBlock.Style>
+                                    </TextBlock>
+                                </StackPanel>
+                            </StackPanel>
+                        </ui:Card>
+
+                        <GridSplitter Grid.Row="1" HorizontalAlignment="Stretch" VerticalAlignment="Center"
+                                      Height="4" Background="Transparent" Cursor="SizeNS" />
+
+                        <!-- Data Grid Section -->
+                        <ui:Card Grid.Row="2" Margin="8,4,8,8" Padding="4">
+                            <DataGrid x:Name="PointsDataGrid" AutoGenerateColumns="False" IsReadOnly="True"
+                                      HeadersVisibility="Column" GridLinesVisibility="All"
+                                      HorizontalGridLinesBrush="{DynamicResource ControlStrongStrokeColorDefaultBrush}"
+                                      VerticalGridLinesBrush="{DynamicResource ControlStrongStrokeColorDefaultBrush}"
+                                      Background="Transparent" BorderThickness="0"
+                                      AlternatingRowBackground="{DynamicResource ApplicationBackgroundBrush}"
+                                      Foreground="{DynamicResource TextFillColorPrimaryBrush}"
+                                      CanUserSortColumns="True" CanUserResizeColumns="True"
+                                      CanUserAddRows="False" RowHeaderWidth="0"
+                                      SelectionMode="Single">
+                                <DataGrid.Columns>
+                                    <DataGridTextColumn Header="#" Binding="{Binding Index}" Width="45" />
+                                    <DataGridTextColumn Header="Local X" Binding="{Binding LocalX, StringFormat=F1}" Width="90" />
+                                    <DataGridTextColumn Header="Local Y" Binding="{Binding LocalY, StringFormat=F1}" Width="90" />
+                                    <DataGridTextColumn Header="Global X" Binding="{Binding GlobalX, StringFormat=F1}" Width="90" />
+                                    <DataGridTextColumn Header="Global Y" Binding="{Binding GlobalY, StringFormat=F1}" Width="90" />
+                                </DataGrid.Columns>
+                            </DataGrid>
+                        </ui:Card>
+                    </Grid>
+
+                    <GridSplitter Grid.Column="1" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"
+                                  Width="4" Background="Transparent" Cursor="SizeWE" />
+
+                    <!-- Right: Visualization full height -->
+                    <Grid Grid.Column="2" Margin="8,8,8,8">
+                        <controls:DrawingPanel x:Name="PointsCanvas" />
+                    </Grid>
+                </Grid>
+            </TabItem>
+
+            <!-- ═══════════════════ TAB 2: Zoned Panel ═══════════════════ -->
+            <TabItem>
+                <TabItem.Header>
+                    <TextBlock Text="  Zoned Panel  " FontWeight="SemiBold" />
+                </TabItem.Header>
+                <Grid DataContext="{Binding ZonedPanel}">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" MinWidth="300" />
+                        <ColumnDefinition Width="4" />
+                        <ColumnDefinition Width="*" MinWidth="300" />
+                    </Grid.ColumnDefinitions>
+
+                    <!-- Left: Input + DataGrid -->
+                    <Grid Grid.Column="0">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto" MinHeight="100" />
+                            <RowDefinition Height="4" />
+                            <RowDefinition Height="*" MinHeight="120" />
+                        </Grid.RowDefinitions>
+
+                        <!-- Input Section -->
+                        <ui:Card Grid.Row="0" Margin="8,8,8,4" Padding="12">
+                            <StackPanel>
+                                <TextBlock Text="Zoned Panel Configuration" FontSize="13" FontWeight="SemiBold"
+                                           Foreground="{DynamicResource TextFillColorPrimaryBrush}" Margin="0,0,0,10" />
+                                <TextBlock Text="Split a panel into vertical zones with optional side sockets and a central opening"
+                                           Foreground="{DynamicResource TextFillColorTertiaryBrush}" FontSize="11"
+                                           TextWrapping="Wrap" Margin="0,0,0,16" />
+
+                                <WrapPanel Orientation="Horizontal">
+                                    <StackPanel Width="140" Margin="0,0,10,4">
+                                        <TextBlock Text="Width (mm)" Foreground="{DynamicResource TextFillColorSecondaryBrush}" FontSize="11" Margin="0,0,0,2" />
+                                        <ui:TextBox x:Name="ZonedWidth" Text="{Binding Width, UpdateSourceTrigger=PropertyChanged}" />
+                                    </StackPanel>
+                                    <StackPanel Width="140" Margin="0,0,10,4">
+                                        <TextBlock Text="Length (mm)" Foreground="{DynamicResource TextFillColorSecondaryBrush}" FontSize="11" Margin="0,0,0,2" />
+                                        <ui:TextBox x:Name="ZonedLength" Text="{Binding Length, UpdateSourceTrigger=PropertyChanged}" />
+                                    </StackPanel>
+                                    <StackPanel Width="140" Margin="0,0,10,4">
+                                        <TextBlock Text="Left Socket W" Foreground="{DynamicResource TextFillColorSecondaryBrush}" FontSize="11" Margin="0,0,0,2" />
+                                        <ui:TextBox x:Name="ZonedLeftSocketW" Text="{Binding LeftSocketW, UpdateSourceTrigger=PropertyChanged}" />
+                                    </StackPanel>
+                                    <StackPanel Width="140" Margin="0,0,10,4">
+                                        <TextBlock Text="Left Socket H" Foreground="{DynamicResource TextFillColorSecondaryBrush}" FontSize="11" Margin="0,0,0,2" />
+                                        <ui:TextBox x:Name="ZonedLeftSocketH" Text="{Binding LeftSocketH, UpdateSourceTrigger=PropertyChanged}" />
+                                    </StackPanel>
+                                    <StackPanel Width="140" Margin="0,0,10,4">
+                                        <TextBlock Text="Right Socket W" Foreground="{DynamicResource TextFillColorSecondaryBrush}" FontSize="11" Margin="0,0,0,2" />
+                                        <ui:TextBox x:Name="ZonedRightSocketW" Text="{Binding RightSocketW, UpdateSourceTrigger=PropertyChanged}" />
+                                    </StackPanel>
+                                    <StackPanel Width="140" Margin="0,0,10,4">
+                                        <TextBlock Text="Right Socket H" Foreground="{DynamicResource TextFillColorSecondaryBrush}" FontSize="11" Margin="0,0,0,2" />
+                                        <ui:TextBox x:Name="ZonedRightSocketH" Text="{Binding RightSocketH, UpdateSourceTrigger=PropertyChanged}" />
+                                    </StackPanel>
+                                    <StackPanel Width="140" Margin="0,0,10,4">
+                                        <TextBlock Text="Opening MinX" Foreground="{DynamicResource TextFillColorSecondaryBrush}" FontSize="11" Margin="0,0,0,2" />
+                                        <ui:TextBox x:Name="ZonedOpeningMinX" Text="{Binding OpeningMinX, UpdateSourceTrigger=PropertyChanged}" />
+                                    </StackPanel>
+                                    <StackPanel Width="140" Margin="0,0,10,4">
+                                        <TextBlock Text="Opening Width" Foreground="{DynamicResource TextFillColorSecondaryBrush}" FontSize="11" Margin="0,0,0,2" />
+                                        <ui:TextBox x:Name="ZonedOpeningWidth" Text="{Binding OpeningWidth, UpdateSourceTrigger=PropertyChanged}" />
+                                    </StackPanel>
+                                    <StackPanel Width="140" Margin="0,0,10,4">
+                                        <TextBlock Text="Opening MinY" Foreground="{DynamicResource TextFillColorSecondaryBrush}" FontSize="11" Margin="0,0,0,2" />
+                                        <ui:TextBox x:Name="ZonedOpeningMinY" Text="{Binding OpeningMinY, UpdateSourceTrigger=PropertyChanged}" />
+                                    </StackPanel>
+                                    <StackPanel Width="140" Margin="0,0,10,4">
+                                        <TextBlock Text="Opening Height" Foreground="{DynamicResource TextFillColorSecondaryBrush}" FontSize="11" Margin="0,0,0,2" />
+                                        <ui:TextBox x:Name="ZonedOpeningHeight" Text="{Binding OpeningHeight, UpdateSourceTrigger=PropertyChanged}" />
+                                    </StackPanel>
+                                </WrapPanel>
+
+                                <StackPanel Orientation="Horizontal" Margin="0,8,0,0">
+                                    <ui:Button Content="Build Zoned Panel" Appearance="Primary"
+                                               Command="{Binding BuildCommand}" Padding="16,4" />
+                                    <TextBlock Text="{Binding StatusMessage}" Margin="12,0,0,0"
+                                               VerticalAlignment="Center" TextWrapping="Wrap"
+                                               FontSize="12" FontFamily="Consolas">
+                                        <TextBlock.Style>
+                                            <Style TargetType="TextBlock">
+                                                <Setter Property="Foreground" Value="{DynamicResource TextFillColorSecondaryBrush}" />
+                                                <Style.Triggers>
+                                                    <DataTrigger Binding="{Binding HasError}" Value="True">
+                                                        <Setter Property="Foreground" Value="#ef4444" />
+                                                    </DataTrigger>
+                                                </Style.Triggers>
+                                            </Style>
+                                        </TextBlock.Style>
+                                    </TextBlock>
+                                </StackPanel>
+                            </StackPanel>
+                        </ui:Card>
+
+                        <GridSplitter Grid.Row="1" HorizontalAlignment="Stretch" VerticalAlignment="Center"
+                                      Height="4" Background="Transparent" Cursor="SizeNS" />
+
+                        <!-- Data Grid Section -->
+                        <ui:Card Grid.Row="2" Margin="8,4,8,8" Padding="4">
+                            <DataGrid x:Name="ZonesDataGrid" AutoGenerateColumns="False" IsReadOnly="True"
+                                      HeadersVisibility="Column" GridLinesVisibility="All"
+                                      HorizontalGridLinesBrush="{DynamicResource ControlStrongStrokeColorDefaultBrush}"
+                                      VerticalGridLinesBrush="{DynamicResource ControlStrongStrokeColorDefaultBrush}"
+                                      Background="Transparent" BorderThickness="0"
+                                      AlternatingRowBackground="{DynamicResource ApplicationBackgroundBrush}"
+                                      Foreground="{DynamicResource TextFillColorPrimaryBrush}"
+                                      CanUserSortColumns="True" CanUserResizeColumns="True"
+                                      CanUserAddRows="False" RowHeaderWidth="0">
+                                <DataGrid.Columns>
+                                    <DataGridTextColumn Header="Zone Name" Binding="{Binding Name}" Width="160" />
+                                    <DataGridTextColumn Header="X" Binding="{Binding X, StringFormat=F1}" Width="100" />
+                                    <DataGridTextColumn Header="Width" Binding="{Binding Width, StringFormat=F1}" Width="100" />
+                                    <DataGridTextColumn Header="Height" Binding="{Binding Height, StringFormat=F1}" Width="100" />
+                                </DataGrid.Columns>
+                            </DataGrid>
+                        </ui:Card>
+                    </Grid>
+
+                    <GridSplitter Grid.Column="1" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"
+                                  Width="4" Background="Transparent" Cursor="SizeWE" />
+
+                    <!-- Right: Visualization full height -->
+                    <Grid Grid.Column="2" Margin="8,8,8,8">
+                        <controls:DrawingPanel x:Name="ZonedCanvas" />
+                    </Grid>
+                </Grid>
+            </TabItem>
+
+            <!-- ═══════════════════ TAB 3: Horizontal Lines ═══════════════════ -->
+            <TabItem>
+                <TabItem.Header>
+                    <TextBlock Text="  Horizontal Lines  " FontWeight="SemiBold" />
+                </TabItem.Header>
+                <Grid DataContext="{Binding HorizontalLines}">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" MinWidth="300" />
+                        <ColumnDefinition Width="4" />
+                        <ColumnDefinition Width="*" MinWidth="300" />
+                    </Grid.ColumnDefinitions>
+
+                    <!-- Left: Input + DataGrid -->
+                    <Grid Grid.Column="0">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto" MinHeight="100" />
+                            <RowDefinition Height="4" />
+                            <RowDefinition Height="*" MinHeight="120" />
+                        </Grid.RowDefinitions>
+
+                        <!-- Input Section -->
+                        <ui:Card Grid.Row="0" Margin="8,8,8,4" Padding="12">
+                            <StackPanel>
+                                <TextBlock Text="Horizontal Lines Configuration" FontSize="13" FontWeight="SemiBold"
+                                           Foreground="{DynamicResource TextFillColorPrimaryBrush}" Margin="0,0,0,10" />
+                                <TextBlock Text="Generate horizontal lines at regular intervals, splitting around a central opening"
+                                           Foreground="{DynamicResource TextFillColorTertiaryBrush}" FontSize="11"
+                                           TextWrapping="Wrap" Margin="0,0,0,16" />
+
+                                <WrapPanel Orientation="Horizontal">
+                                    <StackPanel Width="160" Margin="0,0,12,4">
+                                        <TextBlock Text="Width (mm)" Foreground="{DynamicResource TextFillColorSecondaryBrush}" FontSize="11" Margin="0,0,0,2" />
+                                        <ui:TextBox x:Name="LinesWidth" Text="{Binding Width, UpdateSourceTrigger=PropertyChanged}" />
+                                    </StackPanel>
+                                    <StackPanel Width="160" Margin="0,0,12,4">
+                                        <TextBlock Text="Length (mm)" Foreground="{DynamicResource TextFillColorSecondaryBrush}" FontSize="11" Margin="0,0,0,2" />
+                                        <ui:TextBox x:Name="LinesLength" Text="{Binding Length, UpdateSourceTrigger=PropertyChanged}" />
+                                    </StackPanel>
+                                    <StackPanel Width="160" Margin="0,0,12,4">
+                                        <TextBlock Text="Opening MinX" Foreground="{DynamicResource TextFillColorSecondaryBrush}" FontSize="11" Margin="0,0,0,2" />
+                                        <ui:TextBox x:Name="LinesOpeningMinX" Text="{Binding OpeningMinX, UpdateSourceTrigger=PropertyChanged}" />
+                                    </StackPanel>
+                                    <StackPanel Width="160" Margin="0,0,12,4">
+                                        <TextBlock Text="Opening Width" Foreground="{DynamicResource TextFillColorSecondaryBrush}" FontSize="11" Margin="0,0,0,2" />
+                                        <ui:TextBox x:Name="LinesOpeningWidth" Text="{Binding OpeningWidth, UpdateSourceTrigger=PropertyChanged}" />
+                                    </StackPanel>
+                                    <StackPanel Width="160" Margin="0,0,12,4">
+                                        <TextBlock Text="Opening MinY" Foreground="{DynamicResource TextFillColorSecondaryBrush}" FontSize="11" Margin="0,0,0,2" />
+                                        <ui:TextBox x:Name="LinesOpeningMinY" Text="{Binding OpeningMinY, UpdateSourceTrigger=PropertyChanged}" />
+                                    </StackPanel>
+                                    <StackPanel Width="160" Margin="0,0,12,4">
+                                        <TextBlock Text="Opening Height" Foreground="{DynamicResource TextFillColorSecondaryBrush}" FontSize="11" Margin="0,0,0,2" />
+                                        <ui:TextBox x:Name="LinesOpeningHeight" Text="{Binding OpeningHeight, UpdateSourceTrigger=PropertyChanged}" />
+                                    </StackPanel>
+                                    <StackPanel Width="160" Margin="0,0,12,4">
+                                        <TextBlock Text="Step (mm)" Foreground="{DynamicResource TextFillColorSecondaryBrush}" FontSize="11" Margin="0,0,0,2" />
+                                        <ui:TextBox x:Name="LinesStep" Text="{Binding Step, UpdateSourceTrigger=PropertyChanged}" />
+                                    </StackPanel>
+                                </WrapPanel>
+
+                                <StackPanel Orientation="Horizontal" Margin="0,8,0,0">
+                                    <ui:Button Content="Build Lines" Appearance="Primary"
+                                               Command="{Binding BuildCommand}" Padding="16,4" />
+                                    <TextBlock Text="{Binding StatusMessage}" Margin="12,0,0,0"
+                                               VerticalAlignment="Center" TextWrapping="Wrap"
+                                               FontSize="12" FontFamily="Consolas">
+                                        <TextBlock.Style>
+                                            <Style TargetType="TextBlock">
+                                                <Setter Property="Foreground" Value="{DynamicResource TextFillColorSecondaryBrush}" />
+                                                <Style.Triggers>
+                                                    <DataTrigger Binding="{Binding HasError}" Value="True">
+                                                        <Setter Property="Foreground" Value="#ef4444" />
+                                                    </DataTrigger>
+                                                </Style.Triggers>
+                                            </Style>
+                                        </TextBlock.Style>
+                                    </TextBlock>
+                                </StackPanel>
+                            </StackPanel>
+                        </ui:Card>
+
+                        <GridSplitter Grid.Row="1" HorizontalAlignment="Stretch" VerticalAlignment="Center"
+                                      Height="4" Background="Transparent" Cursor="SizeNS" />
+
+                        <!-- Data Grid Section -->
+                        <ui:Card Grid.Row="2" Margin="8,4,8,8" Padding="4">
+                            <DataGrid x:Name="LinesDataGrid" AutoGenerateColumns="False" IsReadOnly="True"
+                                      HeadersVisibility="Column" GridLinesVisibility="All"
+                                      HorizontalGridLinesBrush="{DynamicResource ControlStrongStrokeColorDefaultBrush}"
+                                      VerticalGridLinesBrush="{DynamicResource ControlStrongStrokeColorDefaultBrush}"
+                                      Background="Transparent" BorderThickness="0"
+                                      AlternatingRowBackground="{DynamicResource ApplicationBackgroundBrush}"
+                                      Foreground="{DynamicResource TextFillColorPrimaryBrush}"
+                                      CanUserSortColumns="True" CanUserResizeColumns="True"
+                                      CanUserAddRows="False" RowHeaderWidth="0">
+                                <DataGrid.Columns>
+                                    <DataGridTextColumn Header="#" Binding="{Binding Index}" Width="45" />
+                                    <DataGridTextColumn Header="Start X" Binding="{Binding StartX, StringFormat=F1}" Width="90" />
+                                    <DataGridTextColumn Header="Start Y" Binding="{Binding StartY, StringFormat=F1}" Width="90" />
+                                    <DataGridTextColumn Header="End X" Binding="{Binding EndX, StringFormat=F1}" Width="90" />
+                                    <DataGridTextColumn Header="End Y" Binding="{Binding EndY, StringFormat=F1}" Width="90" />
+                                    <DataGridTextColumn Header="Length" Binding="{Binding Length, StringFormat=F1}" Width="90" />
+                                </DataGrid.Columns>
+                            </DataGrid>
+                        </ui:Card>
+                    </Grid>
+
+                    <GridSplitter Grid.Column="1" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"
+                                  Width="4" Background="Transparent" Cursor="SizeWE" />
+
+                    <!-- Right: Visualization full height -->
+                    <Grid Grid.Column="2" Margin="8,8,8,8">
+                        <controls:DrawingPanel x:Name="LinesCanvas" />
+                    </Grid>
+                </Grid>
+            </TabItem>
+        </TabControl>
     </Grid>
 </Window>

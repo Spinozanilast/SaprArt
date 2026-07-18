@@ -1,6 +1,6 @@
 namespace Core.Layouts;
 
-public class PanelLayoutOptions(
+public class PanelLayout(
     double length, double height,
     double panelWidth, double sidePanelWidth,
     double targetOffset)

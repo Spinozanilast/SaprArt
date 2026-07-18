@@ -4,5 +4,5 @@ namespace Core.Processors;
 
 public interface IPanelPointsCalculator
 {
-    PanelPointCalculationResult Calculate(PanelLayoutOptions options);
+    PanelPointCalculationResult Calculate(PanelLayout options);
 }

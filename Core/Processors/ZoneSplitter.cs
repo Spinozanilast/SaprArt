@@ -68,16 +68,16 @@ public class ZoneSplitter(IZonedPanelValidator validator) : IZoneSplitter
     private void AddOpeningSegments(double openingMinY, double openingHeight, List<VerticalZone> zones, double x,
         double width, double H)
     {
-        var oTop = openingMinY + openingHeight;
+        var aboveHeight = H - openingMinY - openingHeight;
 
-        if (openingMinY > 0)
-            zones.Add(new VerticalZone("OpeningTop", x, width, openingMinY));
+        if (aboveHeight > 0)
+            zones.Add(new VerticalZone("OpeningTop", x, width, aboveHeight));
 
         if (openingHeight > 0)
             zones.Add(new VerticalZone("OpeningCutout", x, width, openingHeight));
 
-        if (H - oTop > 0)
-            zones.Add(new VerticalZone("OpeningBottom", x, width, H - oTop));
+        if (openingMinY > 0)
+            zones.Add(new VerticalZone("OpeningBottom", x, width, openingMinY));
     }
 
     private void AddSocketSegment(List<VerticalZone> zones, string name, double x, double width, double H,
