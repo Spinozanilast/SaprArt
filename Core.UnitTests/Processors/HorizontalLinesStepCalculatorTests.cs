@@ -2,7 +2,7 @@ using Core.Layouts;
 using Core.Processors;
 using Core.Validators;
 
-namespace Core.Test.Processors;
+namespace Core.UnitTests.Processors;
 
 public class HorizontalLinesStepCalculatorTests
 {
@@ -13,7 +13,12 @@ public class HorizontalLinesStepCalculatorTests
     private const double DefaultOpeningMinY = 3;
     private const double DefaultOpeningH = 4;
 
-    private readonly HorizontalLinesStepCalculator _calculator = new();
+    private readonly HorizontalLinesStepCalculator _calculator;
+
+    public HorizontalLinesStepCalculatorTests()
+    {
+        _calculator = new HorizontalLinesStepCalculator(new OpeningPanelValidator());
+    }
 
     private IOpeningPanel CreatePanel(double? width = null, double? length = null,
         double? openingMinX = null, double? openingWidth = null,

@@ -1,6 +1,6 @@
 using Core.Validators;
 
-namespace Core.Test;
+namespace Core.UnitTests.Validators;
 
 public class DoubleValidatorTests
 {

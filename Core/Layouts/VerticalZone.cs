@@ -1,19 +1,11 @@
 namespace Core.Layouts;
 
-public class VerticalZone
+public class VerticalZone(string name, double x, double width, double height)
 {
-    public string Name { get; }
-    public double X { get; }
-    public double Width { get; }
-    public double Height { get; }
-
-    public VerticalZone(string name, double x, double width, double height)
-    {
-        Name = name;
-        X = x;
-        Width = width;
-        Height = height;
-    }
+    public string Name { get; } = name;
+    public double X { get; } = x;
+    public double Width { get; } = width;
+    public double Height { get; } = height;
 
     public override string ToString() => $"{Name}: X={X}, W={Width}, H={Height}";
 }

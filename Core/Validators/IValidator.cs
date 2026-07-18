@@ -1,11 +1,11 @@
 namespace Core.Validators;
 
-public interface IValidator<in TComparable> where TComparable : IComparable<TComparable>
+public interface IValidator
 {
-    IValidator<TComparable> Must(bool condition, string message);
-    IValidator<TComparable> MustBePositive(TComparable value, string name);
-    IValidator<TComparable> MustNotBeNegative(TComparable value, string name);
-    IValidator<TComparable> MustBeLessThan(TComparable value, TComparable max, string name, string maxName);
-    IValidator<TComparable> MustBeInRange(TComparable value, TComparable rangeStart, TComparable rangeEnd, string name);
+    IValidator Must(bool condition, string message);
+    IValidator MustBePositive(double value, string name);
+    IValidator MustNotBeNegative(double value, string name);
+    IValidator MustBeLessThan(double value, double max, string name, string maxName);
+    IValidator MustBeInRange(double value, double rangeStart, double rangeEnd, string name);
     ValidationResult Check();
 }

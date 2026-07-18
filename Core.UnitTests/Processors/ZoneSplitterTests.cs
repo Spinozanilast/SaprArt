@@ -2,7 +2,7 @@ using Core.Layouts;
 using Core.Processors;
 using Core.Validators;
 
-namespace Core.Test.Processors;
+namespace Core.UnitTests.Processors;
 
 public class ZoneSplitterTests
 {

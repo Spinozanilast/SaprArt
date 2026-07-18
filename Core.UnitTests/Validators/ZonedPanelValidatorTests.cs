@@ -1,7 +1,7 @@
 using Core.Layouts;
 using Core.Validators;
 
-namespace Core.Test.Validators;
+namespace Core.UnitTests.Validators;
 
 public class ZonedPanelValidatorTests
 {

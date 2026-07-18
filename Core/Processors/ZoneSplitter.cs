@@ -4,18 +4,11 @@ using Core.Validators;
 
 namespace Core.Processors;
 
-public class ZoneSplitter : IZoneSplitter
+public class ZoneSplitter(IZonedPanelValidator validator) : IZoneSplitter
 {
-    private readonly IZonedPanelValidator _validator;
-
-    public ZoneSplitter(IZonedPanelValidator validator)
-    {
-        _validator = validator;
-    }
-
     public IReadOnlyList<VerticalZone> Split(IZonedPanel panel)
     {
-        _validator.Validate(panel).ThrowIfInvalid();
+        validator.Validate(panel).ThrowIfInvalid();
 
         var zones = new List<VerticalZone>();
         var W = panel.Width;

@@ -3,11 +3,11 @@ using Core.Validators;
 
 namespace Core.Processors;
 
-public class HorizontalLinesStepCalculator : ILinesStepCalculator
+public class HorizontalLinesStepCalculator(IOpeningPanelValidator validator) : ILinesStepCalculator
 {
     public HashSet<Line2D> Calculate(IOpeningPanel openingPanel, double step)
     {
-        ValidateInputs(openingPanel, step);
+        validator.Validate(openingPanel, step).ThrowIfInvalid();
 
         if (step > openingPanel.Length)
             return [];
@@ -35,25 +35,5 @@ public class HorizontalLinesStepCalculator : ILinesStepCalculator
         }
 
         return linesSet;
-    }
-
-    private static void ValidateInputs(IOpeningPanel panel, double step)
-    {
-        ArgumentNullException.ThrowIfNull(panel);
-
-        new DoubleValidator()
-            .MustBePositive(panel.Width, "Width")
-            .MustBePositive(panel.Length, "Length")
-            .MustNotBeNegative(panel.OpeningMinX, "OpeningMinX")
-            .MustNotBeNegative(panel.OpeningMinY, "OpeningMinY")
-            .MustNotBeNegative(panel.OpeningWidth, "OpeningWidth")
-            .MustNotBeNegative(panel.OpeningHeight, "OpeningHeight")
-            .Must(panel.OpeningMinX + panel.OpeningWidth <= panel.Width,
-                $"Opening ({panel.OpeningMinX} + {panel.OpeningWidth}) exceeds panel width ({panel.Width}).")
-            .Must(panel.OpeningMinY + panel.OpeningHeight <= panel.Length,
-                $"Opening ({panel.OpeningMinY} + {panel.OpeningHeight}) exceeds panel length ({panel.Length}).")
-            .MustBePositive(step, "Step")
-            .Check()
-            .ThrowIfInvalid();
     }
 }
