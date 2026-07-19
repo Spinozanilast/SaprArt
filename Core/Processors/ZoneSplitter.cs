@@ -19,7 +19,7 @@ public class ZoneSplitter(IZonedPanelValidator validator) : IZoneSplitter
         if (panel.LeftSocketWidth > 0) xBoundaries.Add(panel.LeftSocketWidth);
         if (panel.RightSocketWidth > 0) xBoundaries.Add(W - panel.RightSocketWidth);
 
-        if (panel.OpeningWidth > 0)
+        if (panel.OpeningWidth > 0 && panel.OpeningHeight > 0)
         {
             xBoundaries.Add(panel.OpeningMinX);
             xBoundaries.Add(panel.OpeningMinX + panel.OpeningWidth);
@@ -68,16 +68,15 @@ public class ZoneSplitter(IZonedPanelValidator validator) : IZoneSplitter
     private void AddOpeningSegments(double openingMinY, double openingHeight, List<VerticalZone> zones, double x,
         double width, double H)
     {
-        var aboveHeight = H - openingMinY - openingHeight;
-
-        if (aboveHeight > 0)
-            zones.Add(new VerticalZone("OpeningTop", x, width, aboveHeight));
+        if (openingMinY > 0)
+            zones.Add(new VerticalZone("OpeningTop", x, width, openingMinY));
 
         if (openingHeight > 0)
             zones.Add(new VerticalZone("OpeningCutout", x, width, openingHeight));
 
-        if (openingMinY > 0)
-            zones.Add(new VerticalZone("OpeningBottom", x, width, openingMinY));
+        var bottomHeight = H - openingHeight - openingMinY;
+        if (bottomHeight > 0)
+            zones.Add(new VerticalZone("OpeningBottom", x, width, bottomHeight));
     }
 
     private void AddSocketSegment(List<VerticalZone> zones, string name, double x, double width, double H,

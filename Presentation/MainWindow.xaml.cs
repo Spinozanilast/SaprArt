@@ -5,11 +5,12 @@ using Presentation.Controls;
 using Presentation.ViewModels;
 using Wpf.Ui;
 using Wpf.Ui.Appearance;
+using Wpf.Ui.Controls;
 
 
 namespace Presentation;
 
-public partial class MainWindow : Window
+public partial class MainWindow : FluentWindow
 {
     private readonly MainViewModel _vm = new();
 

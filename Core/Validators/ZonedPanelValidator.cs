@@ -29,7 +29,7 @@ public class ZonedPanelValidator : IZonedPanelValidator
             .Must(panel.OpeningMinY + panel.OpeningHeight <= panel.Length,
                 $"Opening ({panel.OpeningMinY} + {panel.OpeningHeight}) exceeds panel length ({panel.Length}).")
             .Must(!openingExists || maxSocketHeight <= 0 ||
-                  panel.OpeningMinY + panel.OpeningHeight + MinClearance <= panel.Length - maxSocketHeight,
+                  panel.OpeningMinY >= maxSocketHeight + MinClearance,
                 $"Opening must be at least {MinClearance}mm below the top cutouts.")
             .Check();
     }

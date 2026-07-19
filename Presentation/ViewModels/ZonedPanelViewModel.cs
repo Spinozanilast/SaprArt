@@ -20,7 +20,7 @@ public class ZonedPanelViewModel : ViewModelBase
     private string _rightSocketH = "800";
     private string _openingMinX = "600";
     private string _openingWidth = "800";
-    private string _openingMinY = "500";
+    private string _openingMinY = "900";
     private string _openingHeight = "1200";
     private string _statusMessage = "";
     private bool _hasError;

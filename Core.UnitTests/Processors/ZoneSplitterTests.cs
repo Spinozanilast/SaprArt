@@ -66,7 +66,7 @@ public class ZoneSplitterTests
 
         Assert.Equal(200, zones[3].X);
         Assert.Equal(400, zones[3].Width);
-        Assert.Equal(1200, zones[3].Height);
+        Assert.Equal(500, zones[3].Height);
 
         Assert.Equal(200, zones[4].X);
         Assert.Equal(400, zones[4].Width);
@@ -74,7 +74,7 @@ public class ZoneSplitterTests
 
         Assert.Equal(200, zones[5].X);
         Assert.Equal(400, zones[5].Width);
-        Assert.Equal(500, zones[5].Height);
+        Assert.Equal(1200, zones[5].Height);
 
         Assert.Equal(600, zones[6].X);
         Assert.Equal(320, zones[6].Width);
@@ -142,7 +142,7 @@ public class ZoneSplitterTests
     [Fact]
     public void Split_OpeningAtBottom_OmitsOpeningBottom()
     {
-        var zones = _splitter.Split(CreatePanel(openingMinY: 0));
+        var zones = _splitter.Split(CreatePanel(openingMinY: 300, openingH: 1700));
 
         Assert.Equal(8, zones.Count);
         Assert.Equal("OpeningTop", zones[3].Name);

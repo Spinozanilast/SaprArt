@@ -142,7 +142,7 @@ public class ZonedPanelValidatorTests
             leftSocketHeight: 200, leftSocketWidth: 100,
             rightSocketHeight: 0, rightSocketWidth: 0,
             openingMinX: 200, openingWidth: 400,
-            openingMinY: 1400, openingHeight: 300);
+            openingMinY: 300, openingHeight: 200);
 
         Assert.True(_validator.Validate(panel).IsValid);
     }
@@ -154,7 +154,7 @@ public class ZonedPanelValidatorTests
             leftSocketHeight: 200, leftSocketWidth: 100,
             rightSocketHeight: 150, rightSocketWidth: 80,
             openingMinX: 200, openingWidth: 400,
-            openingMinY: 1500, openingHeight: 300);
+            openingMinY: 250, openingHeight: 200);
 
         Assert.False(_validator.Validate(panel).IsValid);
     }
@@ -180,13 +180,13 @@ public class ZonedPanelValidatorTests
     }
 
     [Fact]
-    public void Validate_OpeningTouchesBottomEdge_IsValid()
+    public void Validate_OpeningBelowSocketsWithClearance_IsValid()
     {
         var panel = new ZonedPanel(DefaultWidth, DefaultLength,
             leftSocketHeight: 200, leftSocketWidth: 100,
             rightSocketHeight: 0, rightSocketWidth: 0,
             openingMinX: 200, openingWidth: 400,
-            openingMinY: 0, openingHeight: 300);
+            openingMinY: 400, openingHeight: 300);
 
         Assert.True(_validator.Validate(panel).IsValid);
     }
